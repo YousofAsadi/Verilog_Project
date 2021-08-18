@@ -12,7 +12,7 @@
 /*                                                                                                  */
 /****************************************************************************************************/
 
-module project
+module project_2
 	(
 	
 	input x, CLK, Reset, // inputs
@@ -23,33 +23,8 @@ module project
 	
 	initial out = 0;
 	
-	//**************************************************************************************
-	// har kodoom az parametr haye moredenazre soal ro be on vane yek register tarif kardam
-	reg [7:0] speed_of_wind;
-	reg [7:0] persent_of_humi;
-	reg [7:0] degree_of_temp;
+	reg [7:0] count = 0; 
 	
-	
-	//************************************************************************************************************
-	// in always block hokme counter ro baraye ma dare va ba har clock pulse, donbale hesabi ro yeki jelo mibare 
-	always @(posedge CLK)
-		
-		if (Reset) 
-		begin
-			speed_of_wind <= 19 + 8; // ba ratesh jamkardam chon clock pulse aval ro nazar nemigire
-			persent_of_humi <= 52 + 1;	// ba ratesh jamkardam chon clock pulse aval ro nazar nemigire
-			degree_of_temp <= 43 + 3; // ba ratesh jamkardam chon clock pulse aval ro nazar nemigire
-		end
-		
-		else
-		begin
-			speed_of_wind <= speed_of_wind + 8;
-			persent_of_humi <= persent_of_humi + 1;
-			degree_of_temp <= degree_of_temp + 3;
-		end
-			
-			
-			
 	//**************************************************************************************************
 	// az in ja be paeen man seta sequence detector tarif kardam ke sequence haye voroodi ro peyda kone
 	// yeki baraye wind va yeki baraye humidity va dar nahayat ham yeki baraye tempreture
@@ -172,22 +147,28 @@ module project
 
 			endcase
 		
-		
 	//*****************************************************************************************************************
 	// vadar nahayat age harkodom az sequence ha detect shod in always meghdare oon ro tooye khorooji be namayesh mide
+	
+	always @(posedge CLK)
+		count <= count + 1;
+	
+	
 	always @(posedge CLK)
 	begin
 	
 		if(output_temp)
-			out <= degree_of_temp;
+			out <= 3 * count + 43;
 			
 		if(output_humi)
-			out <= persent_of_humi;
+			out <= 1 * count + 52;
 			
 		if(output_wind)
-			out <= speed_of_wind;
+			out <= 8 * count + 19;
 	
 	end
 	
 	
+	
 endmodule
+ 
